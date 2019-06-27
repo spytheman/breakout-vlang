@@ -102,6 +102,7 @@ fn main() {
 		gl.clear_color(0, 0, 0, 255)
 		game.draw_scene()
 		window.swap_buffers()
+    glfw.wait_events()
 	}  
   println('Have a nice day.')
 }
@@ -156,6 +157,7 @@ fn (g mut Game) run() {
 		g.move_paddle()
 		g.move_ball()
 		g.delete_broken_bricks()
+    glfw.post_empty_event()
     if(g.quit) {
       break
     }
