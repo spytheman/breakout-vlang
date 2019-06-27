@@ -95,14 +95,14 @@ fn main() {
 	go game.run()
 	go game.print_state()
 	for {
-    if(game.quit) {
+    if( window.should_close() || game.quit ) {
       break
     }
 		gl.clear()
 		gl.clear_color(0, 0, 0, 255)
 		game.draw_scene()
 		window.swap_buffers()
-	}
+	}  
   println('Have a nice day.')
 }
 
@@ -156,7 +156,6 @@ fn (g mut Game) run() {
 		g.move_paddle()
 		g.move_ball()
 		g.delete_broken_bricks()
-		glfw.post_empty_event() // force window redraw
     if(g.quit) {
       break
     }
