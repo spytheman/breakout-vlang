@@ -102,7 +102,6 @@ fn main() {
 		gl.clear_color(0, 0, 0, 255)
 		game.draw_scene()
 		window.swap_buffers()
-		glfw.wait_events()
 	}
   println('Have a nice day.')
 }
@@ -152,6 +151,7 @@ fn (g mut Game) init_field() {
 
 fn (g mut Game) run() {
 	for {
+		glfw.poll_events()
     g.frames++    
 		g.move_paddle()
 		g.move_ball()
