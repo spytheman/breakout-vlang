@@ -255,25 +255,20 @@ const (
   KEY_REPEAT = 2
 )
 fn key_down(wnd voidptr, key int, code int, action, mods int) {
-	mut g := &Game(glfw.get_window_user_pointer(wnd))
-	switch key {
-	case glfw.KEY_ESCAPE:
-    g.quit = true
-	case glfw.KeyLeft:
-    if  action == KEY_DOWN {
-         g.start_moving_paddle(true, false)
-    }
-	case glfw.KeyRight:
-    if  action == KEY_DOWN {
-         g.start_moving_paddle(false, true)
-    }
+  if  action == KEY_DOWN {
+  	mut g := &Game(glfw.get_window_user_pointer(wnd))
+	  switch key {
+    	case glfw.KEY_ESCAPE:
+        g.quit = true
+  	  case glfw.KeyLeft:
+        g.start_moving_paddle(true, false)
+    	case glfw.KeyRight:
+        g.start_moving_paddle(false, true)
+    	case glfw.KeyUp:
+        g.start_moving_paddle(false, false)
+    }  
+    //println('key: $key | action: $action | mods: $mods')
   }
-	case glfw.KeyUp:
-    if  action == KEY_DOWN {
-         g.start_moving_paddle(false, false)
-    }
-  }  
-  println('key: $key | action: $action | mods: $mods')
 }
 
 fn todo (s string) {
