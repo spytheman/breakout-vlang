@@ -88,7 +88,7 @@ fn (g mut Game) init_game() {
     g.paddle.color = gx.rgb(0, 127, 0)
     g.paddle.x = WinWidth / 2
     g.paddle.size = 40
-    g.paddle.height = 215
+    g.paddle.height = 15
     g.paddle.maxspeed = 5
     g.paddle.y = WinHeight - g.paddle.height
 
@@ -165,15 +165,38 @@ fn (g mut Game) move_ball() {
         g.ball.dx *= -1
     }
     if g.ball.y + g.ball.radius > WinHeight && g.ball.dy > 0 {
-        g.ball.y = WinHeight - g.ball.radius
-        g.ball.dy *= -1
+		g.ball.y = 0
+        //g.ball.y = WinHeight - g.ball.radius
+        //g.ball.dy *= -1
     }
     if g.ball.y - g.ball.radius < 0 && g.ball.dy < 0 {
         g.ball.y = g.ball.radius
         g.ball.dy *= -1
     }
+
+    if  g.ball.y + g.ball.radius > g.paddle.y &&
+		iabs(g.ball.x - g.paddle.x) < g.paddle.size &&
+		g.ball.dy > 0
+	{
+		if 1.0 * iabs(g.ball.x - g.paddle.x) > (0.6 * g.paddle.size) {
+			println('paddle edge hit')
+			g.ball.dx *= -1 
+		}else{
+			println('paddle hit')
+		}
+        g.ball.y = g.paddle.y - g.ball.radius
+        g.ball.dy *= -1
+    }
+	
     //g.ball.y += rand.next(4) - 2
     //g.ball.x += rand.next(4) - 2
+}
+
+fn iabs(a int) int {
+	if a >= 0 {
+		return a
+	}
+	return -a
 }
 
 fn (g mut Game) delete_broken_bricks() {
@@ -189,7 +212,7 @@ fn (g &Game) print_state() {
         }
         fps = g.frames - old_frames
         old_frames = g.frames
-        println(' frame: $g.frames | fps: $fps | game.ball: $g.ball.x $g.ball.y | game.paddle: $g.paddle.x $g.paddle.y')
+        println(' frame: $g.frames | fps: $fps | game.ball: $g.ball.x $g.ball.y $g.ball.dx $g.ball.dy | game.paddle: $g.paddle.x $g.paddle.y')
         time.sleep( time.seconds(1) )
     }
 }
@@ -275,7 +298,7 @@ fn main() {
 
     for {
         if( window.should_close() || game.quit ) {
-            break
+			break
         }
         gl.clear()
         gl.clear_color(0, 0, 0, 255)
