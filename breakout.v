@@ -84,7 +84,7 @@ fn (g mut Game) init_game() {
     g.init_bricks()
     g.init_field()
 
-    //  g.paddle.image = gg.create_image( '/13/home/delian/Work/spytheman_vlang/examples/breakout/paddle.png' )
+    g.paddle.image = gg.create_image( 'paddle.png' )
     g.paddle.color = gx.rgb(0, 127, 0)
     g.paddle.x = WinWidth / 2
     g.paddle.size = 40
@@ -96,7 +96,7 @@ fn (g mut Game) init_game() {
     g.ball.dx = 3
     g.ball.dy = 3
     g.ball.radius = 12
-    //  g.ball.image = gg.create_image( '/13/home/delian/Work/spytheman_vlang/examples/breakout/ball.png' )
+	g.ball.image = gg.create_image( 'ball.png' )
 
     g.quit = false
 }
@@ -165,7 +165,9 @@ fn (g mut Game) move_ball() {
         g.ball.dx *= -1
     }
     if g.ball.y + g.ball.radius > WinHeight && g.ball.dy > 0 {
+		println('Ball fell through. You died.')
 		g.ball.y = 0
+		g.ball.x = rand.next(WinWidth)
         //g.ball.y = WinHeight - g.ball.radius
         //g.ball.dy *= -1
     }
@@ -218,11 +220,13 @@ fn (g &Game) print_state() {
 }
 
 fn (g &Game) draw_paddle() {
-    g.gg.draw_rect( g.paddle.x - g.paddle.size, g.paddle.y, 2*g.paddle.size, g.paddle.height, g.paddle.color )
+//    g.gg.draw_rect( g.paddle.x - g.paddle.size, g.paddle.y, 2*g.paddle.size, g.paddle.height, g.paddle.color )
+	g.gg.draw_image( g.paddle.x - g.paddle.size, g.paddle.y+g.paddle.height, 2*g.paddle.size, - g.paddle.height, g.paddle.image )
 }
 
 fn (g &Game) draw_ball() {
-    g.gg.draw_rect( g.ball.x-g.ball.radius, g.ball.y-g.ball.radius, 2*g.ball.radius, 2*g.ball.radius, g.ball.color )
+    //g.gg.draw_rect( g.ball.x-g.ball.radius, g.ball.y-g.ball.radius, 2*g.ball.radius, 2*g.ball.radius, g.ball.color )
+	g.gg.draw_image( g.ball.x - g.ball.radius, g.ball.y+g.ball.radius, 2*g.ball.radius, -2*g.ball.radius, g.ball.image )
 }
 
 fn (g &Game) draw_brick(i int, j int) {
@@ -277,7 +281,6 @@ fn (g &Game) start_moving_paddle(le bool, ri bool) {
 fn main() {
     glfw.init()
     mut game := &Game{gg: 0}
-    game.init_game()
     mut window := glfw.create_window(glfw.WinCfg {
         width: WinWidth
         height: WinHeight
@@ -293,6 +296,7 @@ fn main() {
         use_ortho: true
     })
 
+    game.init_game()
     go game.run()
     go game.print_state()
 
