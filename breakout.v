@@ -17,7 +17,7 @@ const (
     BrickHeight = 20 // pixels
     WinWidth = BrickWidth * MaxBricksX
     WinHeight = BrickHeight * MaxBricksY
-    TimerPeriod = time.milliseconds(16)
+    TimerPeriod = 16
 )
 
 struct Moves {
@@ -107,7 +107,7 @@ fn (g mut Game) run() {
         if(g.quit) {
             break
         }
-        time.sleep(TimerPeriod)
+        time.sleep_ms(TimerPeriod)
     }
 }
 
@@ -188,7 +188,7 @@ fn (g &Game) print_state() {
         fps = g.frames - old_frames
         old_frames = g.frames
         println(' frame: $g.frames | fps: $fps | game.ball: $g.ball.x $g.ball.y $g.ball.dx $g.ball.dy | game.paddle: $g.paddle.x $g.paddle.y')
-        time.sleep( time.seconds(1) )
+        time.sleep_ms( 1000 )
     }
 }
 
