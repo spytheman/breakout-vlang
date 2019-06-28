@@ -63,15 +63,8 @@ mut:
     bricks []Brick
     paddle Paddle
     ball Ball
-    // field[y][x] contains the color of the block with (x,y) coordinates
-    // "-1" border is to avoid bounds checking.
-    // -1 -1 -1 -1
-    // -1  0  0 -1
-    // -1  0  0 -1
-    // -1 -1 -1 -1
-    field []array_int
     quit bool
-  gg          *gg.GG
+    gg   *gg.GG
 }
 
 
@@ -82,9 +75,8 @@ fn ptodo (s string) {
 fn (g mut Game) init_game() {
     rand.seed()
     g.init_bricks()
-    g.init_field()
 
-    g.paddle.image = gg.create_image( 'paddle.png' )
+    g.paddle.image = gg.create_image( 'assets/paddle.png' )
     g.paddle.color = gx.rgb(0, 127, 0)
     g.paddle.x = WinWidth / 2
     g.paddle.size = 40
@@ -96,30 +88,13 @@ fn (g mut Game) init_game() {
     g.ball.dx = 3
     g.ball.dy = 3
     g.ball.radius = 12
-	g.ball.image = gg.create_image( 'ball.png' )
+  	g.ball.image = gg.create_image( 'assets/ball.png' )
 
     g.quit = false
 }
 
 fn (g mut Game) init_bricks() {
     ptodo('init_bricks')
-}
-
-fn (g mut Game) init_field() {
-    g.field = []array_int
-    // Generate the field, fill it with 0's, add -1's on each edge
-    for i := 0; i < MaxBricksY + 2; i++ {
-        mut row := [0; MaxBricksX + 2]
-        row[0] = - 1
-        row[MaxBricksX + 1] = - 1
-        g.field << row
-    }
-    mut first_row := g.field[0]
-    mut last_row := g.field[MaxBricksY + 1]
-    for j := 0; j < MaxBricksX + 2; j++ {
-        first_row[j] = - 1
-        last_row[j] = - 1
-    }
 }
 
 fn (g mut Game) run() {
@@ -220,27 +195,21 @@ fn (g &Game) print_state() {
 }
 
 fn (g &Game) draw_paddle() {
-//    g.gg.draw_rect( g.paddle.x - g.paddle.size, g.paddle.y, 2*g.paddle.size, g.paddle.height, g.paddle.color )
+  // g.gg.draw_rect( g.paddle.x - g.paddle.size, g.paddle.y, 2*g.paddle.size, g.paddle.height, g.paddle.color )
 	g.gg.draw_image( g.paddle.x - g.paddle.size, g.paddle.y+g.paddle.height, 2*g.paddle.size, - g.paddle.height, g.paddle.image )
 }
 
 fn (g &Game) draw_ball() {
-    //g.gg.draw_rect( g.ball.x-g.ball.radius, g.ball.y-g.ball.radius, 2*g.ball.radius, 2*g.ball.radius, g.ball.color )
+  // g.gg.draw_rect( g.ball.x-g.ball.radius, g.ball.y-g.ball.radius, 2*g.ball.radius, 2*g.ball.radius, g.ball.color )
 	g.gg.draw_image( g.ball.x - g.ball.radius, g.ball.y+g.ball.radius, 2*g.ball.radius, -2*g.ball.radius, g.ball.image )
 }
 
-fn (g &Game) draw_brick(i int, j int) {
-    ptodo('draw_brick $i $j')
-}
 fn (g &Game) draw_bricks() {
-    for i := 1; i < MaxBricksY + 1; i++ {
-        for j := 1; j < MaxBricksX + 1; j++ {
-            f := g.field[i]
-            if f[j] > 0 {
-                g.draw_brick(i, j)
-            }
-        }
-    }
+  //  ptodo('draw_bricks')
+}
+
+fn (g &Game) draw_brick(i int, j int) {
+  //  ptodo('draw_brick $i $j')
 }
 
 fn (g &Game) draw_scene() {
