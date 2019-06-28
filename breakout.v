@@ -210,10 +210,21 @@ fn (g &Game) draw_brick(i int, j int) {
     //ptodo('draw_brick $i $j')
 }
 
+fn (g &Game) draw_stats() {
+    //ptodo('draw_stats')
+	//cfg := gx.TextCfg {
+	//	color: gx.Yellow,
+	//	size: 12,
+	//	align: gx.ALIGN_LEFT,
+	//}
+	//g.gg.draw_text( 50, 50, 'Ball: $g.ball.x $g.ball.y', cfg)
+}
+
 fn (g &Game) draw_scene() {
     g.draw_bricks()
     g.draw_paddle()
     g.draw_ball()
+	g.draw_stats()
 }
 
 const (
