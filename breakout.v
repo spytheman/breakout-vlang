@@ -67,7 +67,6 @@ mut:
     gg   *gg.GG
 }
 
-
 fn ptodo (s string) {
     println('TODO: $s')
 }
@@ -88,7 +87,7 @@ fn (g mut Game) init_game() {
     g.ball.dx = 3
     g.ball.dy = 3
     g.ball.radius = 12
-  	g.ball.image = gg.create_image( 'assets/ball.png' )
+    g.ball.image = gg.create_image( 'assets/ball.png' )
 
     g.quit = false
 }
@@ -140,9 +139,9 @@ fn (g mut Game) move_ball() {
         g.ball.dx *= -1
     }
     if g.ball.y + g.ball.radius > WinHeight && g.ball.dy > 0 {
-		println('Ball fell through. You died.')
-		g.ball.y = 0
-		g.ball.x = rand.next(WinWidth)
+        println('Ball fell through. You died.')
+        g.ball.y = 0
+        g.ball.x = rand.next(WinWidth)
         //g.ball.y = WinHeight - g.ball.radius
         //g.ball.dy *= -1
     }
@@ -152,32 +151,31 @@ fn (g mut Game) move_ball() {
     }
 
     if  g.ball.y + g.ball.radius > g.paddle.y &&
-		iabs(g.ball.x - g.paddle.x) < g.paddle.size &&
-		g.ball.dy > 0
-	{
-		if 1.0 * iabs(g.ball.x - g.paddle.x) > (0.6 * g.paddle.size) {
-			println('paddle edge hit')
-			g.ball.dx *= -1 
-		}else{
-			println('paddle hit')
-		}
+        iabs(g.ball.x - g.paddle.x) < g.paddle.size &&
+        g.ball.dy > 0
+    {
+        if 1.0 * iabs(g.ball.x - g.paddle.x) > (0.6 * g.paddle.size) {
+            println('paddle edge hit')
+            g.ball.dx *= -1
+        }else{
+            println('paddle hit')
+        }
         g.ball.y = g.paddle.y - g.ball.radius
         g.ball.dy *= -1
     }
-	
     //g.ball.y += rand.next(4) - 2
     //g.ball.x += rand.next(4) - 2
 }
 
 fn iabs(a int) int {
-	if a >= 0 {
-		return a
-	}
-	return -a
+    if a >= 0 {
+        return a
+    }
+    return -a
 }
 
 fn (g mut Game) delete_broken_bricks() {
-    //  ptodo('delete_broken_bricks')
+    //ptodo('delete_broken_bricks')
 }
 
 fn (g &Game) print_state() {
@@ -195,21 +193,21 @@ fn (g &Game) print_state() {
 }
 
 fn (g &Game) draw_paddle() {
-  // g.gg.draw_rect( g.paddle.x - g.paddle.size, g.paddle.y, 2*g.paddle.size, g.paddle.height, g.paddle.color )
-	g.gg.draw_image( g.paddle.x - g.paddle.size, g.paddle.y+g.paddle.height, 2*g.paddle.size, - g.paddle.height, g.paddle.image )
+    //g.gg.draw_rect( g.paddle.x - g.paddle.size, g.paddle.y, 2*g.paddle.size, g.paddle.height, g.paddle.color )
+    g.gg.draw_image( g.paddle.x - g.paddle.size, g.paddle.y+g.paddle.height, 2*g.paddle.size, - g.paddle.height, g.paddle.image )
 }
 
 fn (g &Game) draw_ball() {
-  // g.gg.draw_rect( g.ball.x-g.ball.radius, g.ball.y-g.ball.radius, 2*g.ball.radius, 2*g.ball.radius, g.ball.color )
-	g.gg.draw_image( g.ball.x - g.ball.radius, g.ball.y+g.ball.radius, 2*g.ball.radius, -2*g.ball.radius, g.ball.image )
+    //g.gg.draw_rect( g.ball.x-g.ball.radius, g.ball.y-g.ball.radius, 2*g.ball.radius, 2*g.ball.radius, g.ball.color )
+    g.gg.draw_image( g.ball.x - g.ball.radius, g.ball.y+g.ball.radius, 2*g.ball.radius, -2*g.ball.radius, g.ball.image )
 }
 
 fn (g &Game) draw_bricks() {
-  //  ptodo('draw_bricks')
+    //ptodo('draw_bricks')
 }
 
 fn (g &Game) draw_brick(i int, j int) {
-  //  ptodo('draw_brick $i $j')
+    //ptodo('draw_brick $i $j')
 }
 
 fn (g &Game) draw_scene() {
@@ -271,7 +269,7 @@ fn main() {
 
     for {
         if( window.should_close() || game.quit ) {
-			break
+            break
         }
         gl.clear()
         gl.clear_color(0, 0, 0, 255)
