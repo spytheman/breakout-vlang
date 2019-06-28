@@ -7,8 +7,8 @@ clean:
 	rm -rf breakout
 
 pack: breakout
-	@ls -lart breakout
-	@strip breakout
-	@ls -lart breakout
-	@upx -qqq --best breakout
-	@ls -lart breakout
+	@echo "   `ls -ahs breakout`"
+	strip breakout
+	@echo "   `ls -ahs breakout`"
+	upx -qqq --best breakout
+	@echo "   `ls -ahs breakout`"
