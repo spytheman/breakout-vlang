@@ -86,7 +86,7 @@ fn (g mut Game) init_game() {
     g.ball.color = gx.rgb(255, 255, 0)
     g.ball.dx = 3
     g.ball.dy = 3
-    g.ball.radius = 12
+    g.ball.radius = 32
     g.ball.image = gg.create_image( 'assets/ball.png' )
 
     g.quit = false
