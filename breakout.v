@@ -180,7 +180,7 @@ fn (g mut Game) delete_broken_bricks() {
 
 fn (g &Game) print_state() {
     mut old_frames := g.frames
-    mut fps = 0
+    mut fps := 0
     for {
         if(g.quit){
             break
