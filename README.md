@@ -12,5 +12,6 @@ $ v breakout.v
 ```
 
 Executable size after compiling, striping and upx compressing:
+
 ![](assets/executable_size_after_strip_and_after_upx.png)
 
