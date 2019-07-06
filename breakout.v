@@ -59,12 +59,14 @@ mut:
 struct Game {
 mut:
     frames int
+    fps int
     moves Moves
     bricks []Brick
     paddle Paddle
     ball Ball
     quit bool
     gg   *gg.GG
+    textConfig gx.TextCfg
 }
 
 fn ptodo (s string) {
@@ -74,6 +76,7 @@ fn ptodo (s string) {
 fn (g mut Game) init_game() {
     rand.seed()
     g.init_bricks()
+    g.textConfig = gx.TextCfg {   color: gx.White,   size: 18,   align: gx.ALIGN_LEFT,   }
 
     g.paddle.image = gg.create_image( 'assets/paddle.png' )
     g.paddle.color = gx.rgb(0, 127, 0)
@@ -186,6 +189,7 @@ fn (g &Game) print_state() {
             break
         }
         fps = g.frames - old_frames
+        g.fps = fps
         old_frames = g.frames
         println(' frame: $g.frames | fps: $fps | game.ball: $g.ball.x $g.ball.y $g.ball.dx $g.ball.dy | game.paddle: $g.paddle.x $g.paddle.y')
         time.sleep_ms( 1000 )
@@ -211,20 +215,15 @@ fn (g &Game) draw_brick(i int, j int) {
 }
 
 fn (g &Game) draw_stats() {
-    //ptodo('draw_stats')
-	//cfg := gx.TextCfg {
-	//	color: gx.Yellow,
-	//	size: 12,
-	//	align: gx.ALIGN_LEFT,
-	//}
-	//g.gg.draw_text( 50, 50, 'Ball: $g.ball.x $g.ball.y', cfg)
+    g.gg.draw_text(3,3, 'fps: $g.fps', g.textConfig)
+    g.gg.draw_text(3,20, 'f: $g.frames', g.textConfig)                            
 }
 
 fn (g &Game) draw_scene() {
     g.draw_bricks()
     g.draw_paddle()
     g.draw_ball()
-	g.draw_stats()
+    g.draw_stats()
 }
 
 const (
@@ -273,7 +272,8 @@ fn main() {
     game.gg = gg.new_context(gg.Cfg {
         width: WinWidth
         height: WinHeight
-        use_ortho: true
+        use_ortho: true,
+        font_size: 18,
     })
 
     game.init_game()
