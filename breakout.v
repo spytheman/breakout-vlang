@@ -257,6 +257,8 @@ fn (g &Game) start_moving_paddle(le bool, ri bool) {
 ////////////////////////////////////////////////////////////
 
 fn main() {
+    g_ustring_runes = []int
+    
     glfw.init()
     mut game := &Game{gg: 0}
     mut window := glfw.create_window(glfw.WinCfg {
