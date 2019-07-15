@@ -7,6 +7,7 @@ import time
 import gx
 import gl
 import gg
+//import ft
 import glfw
 import math
 
@@ -74,7 +75,7 @@ fn ptodo (s string) {
 }
 
 fn (g mut Game) init_game() {
-    rand.seed()
+    rand.seed(time.now().uni)
     g.init_bricks()
     g.textConfig = gx.TextCfg {   color: gx.White,   size: 18,   align: gx.ALIGN_LEFT,   }
 
@@ -190,18 +191,16 @@ fn (g &Game) print_state() {
         fps = g.frames - old_frames
         g.fps = fps
         old_frames = g.frames
-        println(' frame: $g.frames | fps: $fps | game.ball: $g.ball.x $g.ball.y $g.ball.dx $g.ball.dy | game.paddle: $g.paddle.x $g.paddle.y')
+        println(' frame: ${g.frames:6d} | fps: ${fps:02d} | game.ball: ${g.ball.x:4d} ${g.ball.y:4d} ${g.ball.dx:2d} ${g.ball.dy:2d} | game.paddle: ${g.paddle.x:3d} ${g.paddle.y:3d}')
         time.sleep_ms( 1000 )
     }
 }
 
 fn (g &Game) draw_paddle() {
-    //g.gg.draw_rect( g.paddle.x - g.paddle.size, g.paddle.y, 2*g.paddle.size, g.paddle.height, g.paddle.color )
     g.gg.draw_image( g.paddle.x - g.paddle.size, g.paddle.y+g.paddle.height, 2*g.paddle.size, - g.paddle.height, g.paddle.image )
 }
 
 fn (g &Game) draw_ball() {
-    //g.gg.draw_rect( g.ball.x-g.ball.radius, g.ball.y-g.ball.radius, 2*g.ball.radius, 2*g.ball.radius, g.ball.color )
     g.gg.draw_image( g.ball.x - g.ball.radius, g.ball.y+g.ball.radius, 2*g.ball.radius, -2*g.ball.radius, g.ball.image )
 }
 
@@ -214,8 +213,8 @@ fn (g &Game) draw_brick(i int, j int) {
 }
 
 fn (g &Game) draw_stats() {
-    g.gg.draw_text(3,3, 'fps: $g.fps', g.textConfig)
-    g.gg.draw_text(3,20, 'f: $g.frames', g.textConfig)                            
+//    g.gg.draw_text(3,3, 'fps: $g.fps', g.textConfig)
+//    g.gg.draw_text(3,20, 'f: $g.frames', g.textConfig)                            
 }
 
 fn (g &Game) draw_scene() {
