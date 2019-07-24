@@ -11,6 +11,12 @@ import gg
 import glfw
 import math
 
+
+import const (
+  GL_SRC_ALPHA
+  GL_ONE_MINUS_SRC_ALPHA
+)
+  
 const (
     MaxBricksX = 10
     MaxBricksY = 30
@@ -267,6 +273,11 @@ fn main() {
     window.make_context_current()
     window.onkeydown(key_down)
     gg.init()
+    
+    // Show transparent PNGs:
+    gl.enable(GL_BLEND)
+    C.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    
     game.gg = gg.new_context(gg.Cfg {
         width: WinWidth
         height: WinHeight
