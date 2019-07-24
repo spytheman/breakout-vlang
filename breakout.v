@@ -1,6 +1,7 @@
 // Copyright (c) 2019 Delyan Angelov. All rights reserved.
 // Use of this source code is governed by an MIT license
 // that can be found in the LICENSE file.
+module main
 
 import rand
 import time
@@ -220,14 +221,7 @@ fn (g &Game) draw_brick(i int, j int) {
 
 fn (g &Game) draw_stats() {
 //    g.gg.draw_text(3,3, 'fps: $g.fps', g.textConfig)
-//    g.gg.draw_text(3,20, 'f: $g.frames', g.textConfig)                            
-}
-
-fn (g &Game) draw_scene() {
-    g.draw_bricks()
-    g.draw_paddle()
-    g.draw_ball()
-    g.draw_stats()
+//    g.gg.draw_text(3,20, 'f: $g.frames', g.textConfig)
 }
 
 const (
@@ -260,8 +254,7 @@ fn (g &Game) start_moving_paddle(le bool, ri bool) {
 ////////////////////////////////////////////////////////////
 
 fn main() {
-    g_ustring_runes = []int
-    
+
     glfw.init()
     mut game := &Game{gg: 0}
     mut window := glfw.create_window(glfw.WinCfg {
@@ -294,12 +287,22 @@ fn main() {
             break
         }
         gl.clear()
-        gl.clear_color(0, 0, 0, 255)
-        game.draw_scene()
+        gl.clear_color(22, 80, 120, 255)
+        game.draw()
         window.swap_buffers()
         glfw.poll_events()
         //glfw.wait_events()
     }
 
     println('Have a nice day.')
+}
+
+
+
+
+fn (g &Game) draw() {
+    g.draw_bricks()
+    g.draw_paddle()
+    g.draw_ball()
+    g.draw_stats()
 }
