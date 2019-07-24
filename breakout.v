@@ -219,6 +219,7 @@ fn (g &Game) draw_brick(i int, j int) {
     //ptodo('draw_brick $i $j')
 }
 
+[live]
 fn (g &Game) draw_stats() {
 //    g.gg.draw_text(3,3, 'fps: $g.fps', g.textConfig)
 //    g.gg.draw_text(3,20, 'f: $g.frames', g.textConfig)
@@ -296,9 +297,6 @@ fn main() {
 
     println('Have a nice day.')
 }
-
-
-
 
 fn (g &Game) draw() {
     g.draw_bricks()
