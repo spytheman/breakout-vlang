@@ -8,10 +8,9 @@ import time
 import gx
 import gl
 import gg
-//import ft
 import glfw
 import math
-
+import freetype
 
 import const (
   GL_SRC_ALPHA
@@ -73,8 +72,10 @@ mut:
     paddle Paddle
     ball Ball
     quit bool
-    gg   *gg.GG
-    textConfig gx.TextCfg
+
+    gg          *gg.GG
+    ft          *freetype.Context
+    text_config *gx.TextCfg
 }
 
 fn ptodo (s string) {
@@ -84,7 +85,7 @@ fn ptodo (s string) {
 fn (g mut Game) init_game() {
     rand.seed(time.now().uni)
     g.init_bricks()
-    g.textConfig = gx.TextCfg {   color: gx.White,   size: 18,   align: gx.ALIGN_LEFT,   }
+    g.text_config = &gx.TextCfg {   color: gx.White,   size: 18,   align: gx.ALIGN_LEFT,   }
 
     g.paddle.image = gg.create_image( 'assets/paddle.png' )
     g.paddle.color = gx.rgb(0, 127, 0)
@@ -188,7 +189,7 @@ fn (g mut Game) delete_broken_bricks() {
     //ptodo('delete_broken_bricks')
 }
 
-fn (g &Game) print_state() {
+fn (g mut Game) print_state() {
     mut old_frames := g.frames
     mut fps := 0
     for {
@@ -203,26 +204,25 @@ fn (g &Game) print_state() {
     }
 }
 
-fn (g &Game) draw_paddle() {
+fn (g mut Game) draw_paddle() {
     g.gg.draw_image( g.paddle.x - g.paddle.size, g.paddle.y+g.paddle.height, 2*g.paddle.size, - g.paddle.height, g.paddle.image )
 }
 
-fn (g &Game) draw_ball() {
+fn (g mut Game) draw_ball() {
     g.gg.draw_image( g.ball.x - g.ball.radius, g.ball.y+g.ball.radius, 2*g.ball.radius, -2*g.ball.radius, g.ball.image )
 }
 
-fn (g &Game) draw_bricks() {
+fn (g mut Game) draw_bricks() {
     //ptodo('draw_bricks')
 }
 
-fn (g &Game) draw_brick(i int, j int) {
+fn (g mut Game) draw_brick(i int, j int) {
     //ptodo('draw_brick $i $j')
 }
 
-[live]
-fn (g &Game) draw_stats() {
-//    g.gg.draw_text(3,3, 'fps: $g.fps', g.textConfig)
-//    g.gg.draw_text(3,20, 'f: $g.frames', g.textConfig)
+fn (g mut Game) draw_stats() {
+    g.ft.draw_text(3,3, 'fps: $g.fps', g.text_config)
+    g.ft.draw_text(3,20, 'f: $g.frames', g.text_config)
 }
 
 const (
@@ -247,9 +247,17 @@ fn key_down(wnd voidptr, key int, code int, action, mods int) {
     }
 }
 
-fn (g &Game) start_moving_paddle(le bool, ri bool) {
+fn (g mut Game) start_moving_paddle(le bool, ri bool) {
     g.moves.right = ri
     g.moves.left  = le
+}
+
+
+fn (g mut Game) draw() {
+    g.draw_bricks()
+    g.draw_paddle()
+    g.draw_ball()
+    g.draw_stats()
 }
 
 ////////////////////////////////////////////////////////////
@@ -257,50 +265,58 @@ fn (g &Game) start_moving_paddle(le bool, ri bool) {
 fn main() {
 
     glfw.init()
-    mut game := &Game{gg: 0}
-    mut window := glfw.create_window(glfw.WinCfg {
-        width: WinWidth
-        height: WinHeight
-        title: 'V Breakout'
-        ptr: game
-    })
-    window.make_context_current()
-    window.onkeydown(key_down)
+    mut game := &Game{
+                      ft: 0
+                      text_config: 0
+                      gg: gg.new_context(
+                                         gg.Cfg {
+                                                 width: WinWidth
+                                                 height: WinHeight
+                                                 use_ortho: true
+                                                 create_window: true
+                                                 window_title: 'V Breakout'
+                                                 window_user_ptr: game
+                                                 })
+                      }
+    game.gg.window.set_user_ptr(game)
+    game.gg.window.onkeydown(key_down)
     gg.init()
-    
+
     // Show transparent PNGs:
     gl.enable(GL_BLEND)
-    C.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-    
-    game.gg = gg.new_context(gg.Cfg {
-        width: WinWidth
-        height: WinHeight
-        use_ortho: true,
-        font_size: 18,
-    })
-
+    C.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)    
+           
+    // Try to load font
+	game.ft = freetype.new_context(gg.Cfg{
+			                              width: WinWidth
+			                              height: WinHeight
+			                              use_ortho: true
+			                              font_size: 18
+		                                  }, 1)
+	if game.ft != 0 {
+	   // if font loaded, define default font color etc..
+	   game.text_config = &gx.TextCfg{
+			                          align:gx.ALIGN_LEFT
+			                          size:12
+			                          color:gx.rgb(0, 0, 170)
+		                              }
+	}
+           
     game.init_game()
     go game.run()
     go game.print_state()
-
+    
     for {
-        if( window.should_close() || game.quit ) {
+        if( game.gg.window.should_close() || game.quit ) {
             break
         }
         gl.clear()
         gl.clear_color(22, 80, 120, 255)
         game.draw()
-        window.swap_buffers()
+        game.gg.window.swap_buffers()
         glfw.poll_events()
         //glfw.wait_events()
     }
 
     println('Have a nice day.')
-}
-
-fn (g &Game) draw() {
-    g.draw_bricks()
-    g.draw_paddle()
-    g.draw_ball()
-    g.draw_stats()
 }
