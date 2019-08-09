@@ -4,7 +4,7 @@ Use arrows to move the paddle. The goal is to keep the ball from falling through
 
 TODO: add bricks too so that the ball can break them.
 
-![](assets/screenshot.jpg)
+![](assets/screenshot.png)
 
 Building:
 ```shell
