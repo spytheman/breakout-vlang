@@ -4,7 +4,7 @@ Use arrows to move the paddle. The goal is to keep the ball from falling through
 
 TODO: add bricks too so that the ball can break them.
 
-![](assets/screenshot.png)
+![game screenshot](assets/screenshot.png)
 
 Building:
 ```shell
@@ -13,5 +13,5 @@ $ v breakout.v
 
 Executable size after compiling, striping and upx compressing:
 
-![](assets/executable_size_after_strip_and_after_upx.png)
+![game executable under 100KB](assets/executable_size_after_strip_and_after_upx_v0.1.17.png)
 
