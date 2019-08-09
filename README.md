@@ -11,7 +11,7 @@ Building:
 $ v breakout.v
 ```
 
-Executable size after compiling, striping and upx compressing:
+Executable size after compiling, striping and upx compressing is < 100KB !
 
 ![game executable under 100KB](assets/executable_size_after_strip_and_after_upx_v0.1.17.png)
 
